@@ -885,8 +885,8 @@ function updateTable(matchingDevices, energyData, totalEnergy) {
         actionButton.style.textDecoration = 'underline';
         actionButton.style.color = 'blue';
         actionButton.onclick = function () {
-            const params = new URLSearchParams({ ud_id: deviceUdId, displayName });
-            window.location.href = `data.html?${params.toString()}`;
+            const params = new URLSearchParams({ ud_id: deviceUdId, displayName, accessToken: accessToken });
+            window.location.href = `https://thewhizly.co.in/prego_0.1/oauth-server/public/data.html?${params.toString()}`;
         };
         actionsCell.appendChild(actionButton);
         row.appendChild(actionsCell);

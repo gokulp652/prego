@@ -160,14 +160,15 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript">
 
-const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJPQXV0aENsaWVudCI6IjY1ZmJmZGUxNmZhY2FmOGQ1YTU4NDNhOCIsIlVzZXIiOnsiX2lkIjoiNjVmZDYzMGJlYWM0YTNlNmI1MTIzZmQ2IiwiaG9tZXMiOlsiNjY2YWNmZjE2MTk3YmNhYWEyMGY5ZWMwIiwiNjVmZDYzODgyZTUwMzRjMGMzOTU4NWFiIiwiNjY1ZWZhYTA5NDVlODI4OTJhNjlhMzcyIiwiNjY2MDAxYWM2YzVhMGZkMmI1YzBlYWRiIl0sInBhcnRuZXIiOiI2MjAyMDA0NmM3NDY2MzBjMzg3ZGVmOTgifSwiaWF0IjoxNzI3NTA3OTYxLCJleHAiOjE3Mjc1OTQzNjF9.Sz2-emLChLyhGNZTaY57OXkqxEzvTdEQl-I1GM9aTfY";
+
+const params = new URLSearchParams(window.location.search);
+const accessToken = params.get('accessToken');
 const dayPicker = document.getElementById('dayPicker');
 const totalEnergySpan = document.getElementById('totalEnergy');
 const fetchDayDataBtn = document.getElementById('fetchDayData');
 let barChart = null;
 
 window.onload = function () {
-    const params = new URLSearchParams(window.location.search);
     const ud_id = params.get('ud_id');
     const today = new Date();
     

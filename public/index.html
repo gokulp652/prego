@@ -141,12 +141,12 @@
         </div>
     </div>
     <script>
-      //  function getAccessToken() {
-      //       const params = new URLSearchParams(window.location.search);
-      //       return params.get('accessToken'); 
-      //   }
+       function getAccessToken() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('accessToken'); 
+        }
 
-        const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJPQXV0aENsaWVudCI6IjY1ZmJmZGUxNmZhY2FmOGQ1YTU4NDNhOCIsIlVzZXIiOnsiX2lkIjoiNjVmZDYzMGJlYWM0YTNlNmI1MTIzZmQ2IiwiaG9tZXMiOlsiNjY2YWNmZjE2MTk3YmNhYWEyMGY5ZWMwIiwiNjVmZDYzODgyZTUwMzRjMGMzOTU4NWFiIiwiNjY1ZWZhYTA5NDVlODI4OTJhNjlhMzcyIiwiNjY2MDAxYWM2YzVhMGZkMmI1YzBlYWRiIl0sInBhcnRuZXIiOiI2MjAyMDA0NmM3NDY2MzBjMzg3ZGVmOTgifSwiaWF0IjoxNzI3NTA3OTYxLCJleHAiOjE3Mjc1OTQzNjF9.Sz2-emLChLyhGNZTaY57OXkqxEzvTdEQl-I1GM9aTfY";
+        const accessToken = getAccessToken();
         
         document.querySelector('form').addEventListener('submit', function(event) {
             event.preventDefault(); 
@@ -169,7 +169,7 @@
 
             if (data.ud_id) {
                 const params = new URLSearchParams({ accessToken: accessToken, ud_id: data.ud_id });
-                window.location.href = 'energy.html?' + params.toString();
+                window.location.href = 'https://thewhizly.co.in/prego_0.1/oauth-server/public/energy.html?' + params.toString();
                } else {
                 alert('No ud_id found for this account.');
             }
