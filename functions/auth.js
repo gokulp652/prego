@@ -49,7 +49,7 @@ router.get("/catchOauthToken", async (req, res) => {
 
           // Create the URL with the accessToken as a query parameter
           const params = new URLSearchParams({ accessToken: '${accessToken}' });
-          const redirectUrl = '/login.html?' + params.toString();
+          const redirectUrl = '/index.html?' + params.toString();
 
           // Redirect to the new URL with the token
           window.location.href = redirectUrl;
