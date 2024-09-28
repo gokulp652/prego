@@ -17,5 +17,6 @@
     "netlify-lambda": "^2.0.16",
     "serverless-http": "^3.2.0"
   },
+  "devDependencies": {},
   "description": ""
 }

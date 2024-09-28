@@ -545,7 +545,7 @@ if (accessToken) {
 
     Promise.all(fetchPromises)
         .then(() => {
-            console.log("tv", totalvalue); // Now you can log totalvalue correctly
+            console.log("tv", totalvalue); 
             handleEnergyDataResponse(matchingDevices, totalvalue, 'month'); // Call response handler
         })
         .catch(error => {
@@ -577,8 +577,14 @@ if (accessToken) {
             //         // }
             //     });
 
-            const totalAverageEnergy = energyData.reduce((sum, data) => sum + data.avg_energy, 0);
-            totalEnergySpan.textContent = `${(totalAverageEnergy).toFixed(2)} kWh`;
+         
+                        const totalAverageEnergy = energyData.reduce((sum, data) => {
+                            const avgEnergyInKWh = data.avg_energy / 3600000; 
+                            return sum + avgEnergyInKWh; 
+                        }, 0);
+
+
+                        totalEnergySpan.textContent = `${totalAverageEnergy.toFixed(2)} kWh`;
 
                 
                 if (viewType === 'day') {
@@ -632,8 +638,14 @@ function updateBarChartHourly(energyData) {
         }
 
         const hourEntry = hourDataMap.get(hour);
-        hourEntry.totalEnergy += data.avg_energy; // Add energy value
-        hourEntry.count += 1; // Increment count
+
+// Convert avg_energy from watt-seconds to kilowatt-hours
+const avgEnergyInKWh = data.avg_energy / 3600000; // Convert to kilowatt-hours
+
+// Update totalEnergy and count
+hourEntry.totalEnergy += avgEnergyInKWh; // Add the converted value
+hourEntry.count += 1;  // Increment the count
+
     });
 
     // Now we calculate the average energy for each hour
@@ -641,10 +653,14 @@ function updateBarChartHourly(energyData) {
     const data = [];
 
     for (let [hour, value] of hourDataMap.entries()) {
-        labels.push(`${hour < 10 ? '0' : ''}${hour}:00`); // Format as HH:00
-        const avgEnergy = value.totalEnergy / value.count; // Calculate average
-        data.push(avgEnergy);
+       
+        labels.push(`${hour < 10 ? '0' : ''}${hour}:00`); 
+        
+        
+        const avgEnergyInKWh = (value.totalEnergy / value.count) / 3600000; 
+        data.push(avgEnergyInKWh); 
     }
+
 
     // Safely destroy the existing chart before creating a new one
     safeDestroyChart(barChart);
@@ -675,7 +691,7 @@ function updateBarChartHourly(energyData) {
                     },
                     ticks: {
                         callback: function (value) {
-                            return `${value} W`; // Display y-axis values as watts
+                            return `${value} kWh`; 
                         }
                     }
                 }
@@ -684,7 +700,7 @@ function updateBarChartHourly(energyData) {
                 tooltip: {
                     callbacks: {
                         label: function (context) {
-                            return `${context.raw} Watt-seconds`;
+                            return `${context.raw} Kwh`;
                         }
                     }
                 }
@@ -701,7 +717,9 @@ function updateBarChartDaily(energyData) {
         if (!acc[day]) {
             acc[day] = { totalEnergy: 0, count: 0 };
         }
-        acc[day].totalEnergy += data.avg_energy;
+        // Convert avg_energy from watt-seconds to kilowatt-hours
+        const avgEnergyInKWh = data.avg_energy / 3600000; // Convert to kilowatt-hours
+        acc[day].totalEnergy += avgEnergyInKWh; // Sum in kWh
         acc[day].count += 1;
         return acc;
     }, {});
@@ -718,14 +736,14 @@ function updateBarChartDaily(energyData) {
     for (let day = minDay; day <= maxDay; day++) {
         labels.push(`Day ${day}`);
         if (aggregatedData[day]) {
-            data.push(aggregatedData[day].totalEnergy);
+            data.push(aggregatedData[day].totalEnergy); // Total energy in kWh
         } else {
             data.push(0); // No data for this day, set energy to 0
         }
     }
 
-    console.log('labels22', labels);
-    console.log('data22', data);
+    console.log('labels', labels);
+    console.log('data', data);
 
     safeDestroyChart(window.barChart);
 
@@ -735,7 +753,7 @@ function updateBarChartDaily(energyData) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Total Energy (Watt-seconds)',
+                label: 'Total Energy (kWh)', // Updated label to kWh
                 data: data,
                 backgroundColor: '#f7ab13',
                 borderColor: '#f5c71a',
@@ -755,7 +773,7 @@ function updateBarChartDaily(energyData) {
                     },
                     ticks: {
                         callback: function (value) {
-                            return `${value} W`;
+                            return `${value} kWh`; // Update the tick callback to kWh
                         }
                     }
                 }
@@ -763,7 +781,6 @@ function updateBarChartDaily(energyData) {
         }
     });
 }
-
 
 function updatePieChart(matchingDevices, energyData, totalEnergy) {
     if (energyData.length === 0 || totalEnergy === 0) {
@@ -779,7 +796,8 @@ function updatePieChart(matchingDevices, energyData, totalEnergy) {
             acc[ud_id] = { avgEnergy: 0, occurrences: 0 }; // Initialize if not already present
         }
 
-        acc[ud_id].avgEnergy += avg_energy || 0;
+        // Convert avg_energy from watt-seconds to kilowatt-hours
+        acc[ud_id].avgEnergy += (avg_energy || 0) / 3600000; // Convert to kilowatt-hours
         acc[ud_id].occurrences += 1;
 
         return acc;
@@ -849,7 +867,7 @@ function updateTable(matchingDevices, energyData, totalEnergy) {
     const table = document.createElement('table');
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    const headers = ['Device Name', 'Energy Consumption', 'Energy Percentage', 'Actions'];
+    const headers = ['Device Name', 'Energy Consumption (kWh)', 'Energy Percentage', 'Actions'];
 
     headers.forEach(headerText => {
         const th = document.createElement('th');
@@ -863,22 +881,18 @@ function updateTable(matchingDevices, energyData, totalEnergy) {
     function addRow(displayName, avgEnergy, energyPercentage, deviceUdId) {
         const row = document.createElement('tr');
         
-        
         const deviceCell = document.createElement('td');
         deviceCell.innerText = displayName;
         row.appendChild(deviceCell);
 
-        
         const consumptionCell = document.createElement('td');
         consumptionCell.innerText = avgEnergy !== undefined ? avgEnergy.toFixed(2) : 'N/A';
         row.appendChild(consumptionCell);
 
-        
         const percentageCell = document.createElement('td');
         percentageCell.innerText = energyPercentage ? energyPercentage.toFixed(2) + '%' : 'N/A';
         row.appendChild(percentageCell);
 
-        
         const actionsCell = document.createElement('td');
         const actionButton = document.createElement('text');
         actionButton.innerText = 'Know More';
@@ -901,7 +915,8 @@ function updateTable(matchingDevices, energyData, totalEnergy) {
             acc[ud_id] = { avgEnergy: 0, occurrences: 0 };
         }
 
-        acc[ud_id].avgEnergy += avg_energy || 0;
+        // Convert avg_energy from watt-seconds to kilowatt-hours
+        acc[ud_id].avgEnergy += (avg_energy || 0) / 3600000; // Convert to kilowatt-hours
         acc[ud_id].occurrences += 1;
 
         return acc;
@@ -918,12 +933,10 @@ function updateTable(matchingDevices, energyData, totalEnergy) {
         if (energyInfo) {
             const { avgEnergy } = energyInfo;
 
-           
             const energyPercentage = avgEnergy && totalEnergy > 0
                 ? (avgEnergy / totalEnergy) * 100
                 : 0;
 
-           
             addRow(displayName, avgEnergy, energyPercentage, ud_id);
         }
     });
@@ -932,6 +945,7 @@ function updateTable(matchingDevices, energyData, totalEnergy) {
     table.appendChild(tbody);
     tableContainer.appendChild(table);
 }
+
 
 
 
