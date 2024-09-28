@@ -1,0 +1,334 @@
+
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+      <title>Prego-Smart Kitchen</title>
+      
+      <!-- Favicon -->
+      <link rel="shortcut icon" href="../assets/images/prego_favicon.png" />
+      
+      <!-- Library / Plugin Css Build -->
+      <link rel="stylesheet" href="../assets/css/core/libs.min.css">
+      
+      <!-- Custom Css -->
+      <link rel="stylesheet" href="../assets/css/aprycot.min.css?v=1.0.0">  
+    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+           
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+     <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+  <!-- Date Range Picker CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  
+     <style>
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+            body {
+              font-family: Arial, sans-serif;
+            }
+            .dashboard {
+              padding: 20px;
+            }
+            .top-bar {
+              height: 150px;
+              display: flex;
+              justify-content: space-evenly;
+              align-items: center;
+            }
+             #img1 {
+              height: 250px;
+              width: 200px;
+              cursor: pointer;
+              margin-right: 200px;
+             margin-left: 50px;
+            }
+            #img2 {
+              height: 50px;
+              width: 50px;
+              margin-left: 680px;
+              cursor: pointer;
+            }
+            
+            .chart-section {
+              width: 100%;
+              height: 50%;
+              margin-left: 90px;
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
+              padding: 20px;
+            }
+            .chart-container {
+              width: 100%;
+              height: 50%;
+            }
+            
+    
+            canvas {
+                margin-top: 20px;
+                width: 100%;
+               
+            }
+            button {
+                background: linear-gradient(90deg, #087fef, #0891fa); 
+                color: white;
+                padding: 12px 20px; 
+                font-size: 16px;
+                border: none; 
+                border-radius: 8px; 
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+                cursor: pointer; 
+                transition: all 0.3s ease;
+            }
+
+            button:hover {
+                background: linear-gradient(90deg, #0891fa, #087fef); 
+                box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); 
+                transform: translateY(-2px); 
+            }
+
+       
+       
+        #deviceList {
+            margin: 20px 0;
+        }
+        pre {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            overflow: auto;
+            max-height: 200px;
+        }
+        canvas {
+            max-width: 100%;
+            margin-top: 20px;
+        }
+          </style>
+ 
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      
+
+    </head>
+  <body>
+
+<div class="dashboard">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <img src="images/prego.png"id="img1">
+      <img src="images/logout.png" id="img2">
+    </div>
+  
+ 
+  
+    <div class="container">
+        <label for="dayPicker">Select a Date:</label><br>
+                <input type="date" id="dayPicker">
+                <button id="fetchDayData" style="margin-left:10px;">Submit</button>
+                
+                <div style="margin-top: 20px;float: right;">
+                    <span style="font-size: 20px;">Total Energy:</span>
+                    <span id="totalEnergy" style="font-size: 18px; color:#f7ab13;">0</span>
+                </div>
+                <div style="display: flex;flex-direction: row;">
+                    <label style="margin-top: 20px;margin-left: 20px; font-weight: bold;color: black;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Total Energy</label>
+                    <div onclick="menuToggle()" style="cursor: pointer; font-size: 30px; font-weight: bold; color: #a29f9f; margin-left: 890px;">
+                        &#9776; 
+                    </div>
+                </div>
+        <canvas id="barChart"></canvas>
+    </div>
+    
+    
+  </div>
+  
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Moment.js (required by Date Range Picker) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<!-- Date Range Picker JS -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+
+const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJPQXV0aENsaWVudCI6IjY1ZmJmZGUxNmZhY2FmOGQ1YTU4NDNhOCIsIlVzZXIiOnsiX2lkIjoiNjVmZDYzMGJlYWM0YTNlNmI1MTIzZmQ2IiwiaG9tZXMiOlsiNjY2YWNmZjE2MTk3YmNhYWEyMGY5ZWMwIiwiNjVmZDYzODgyZTUwMzRjMGMzOTU4NWFiIiwiNjY1ZWZhYTA5NDVlODI4OTJhNjlhMzcyIiwiNjY2MDAxYWM2YzVhMGZkMmI1YzBlYWRiIl0sInBhcnRuZXIiOiI2MjAyMDA0NmM3NDY2MzBjMzg3ZGVmOTgifSwiaWF0IjoxNzI3NTA3OTYxLCJleHAiOjE3Mjc1OTQzNjF9.Sz2-emLChLyhGNZTaY57OXkqxEzvTdEQl-I1GM9aTfY";
+const dayPicker = document.getElementById('dayPicker');
+const totalEnergySpan = document.getElementById('totalEnergy');
+const fetchDayDataBtn = document.getElementById('fetchDayData');
+let barChart = null;
+
+window.onload = function () {
+    const params = new URLSearchParams(window.location.search);
+    const ud_id = params.get('ud_id');
+    const today = new Date();
+    
+    dayPicker.value = today.toISOString().split('T')[0]; 
+
+    if (ud_id) {
+       
+        fetchEnergyDataForDevice(ud_id);
+    } else {
+        alert("No device id found!");
+    }
+
+    fetchDayDataBtn.addEventListener('click', () => {
+        const selectedDate = new Date(dayPicker.value);
+        if (selectedDate) {
+            fetchEnergyDataForDevice(ud_id);
+        } else {
+            alert("Please select a valid date.");
+        }
+    });
+};
+
+
+function fetchEnergyDataForDevice(ud_id) {
+    console.log("Fetching energy data for device:", ud_id);
+
+    const totalvalue = []; 
+    const selectedDate = new Date(dayPicker.value);  
+    const day = selectedDate.getDate();
+    const month = selectedDate.getMonth() + 1; 
+    const year = selectedDate.getFullYear();
+
+    console.log(`Fetching energy data for: ${year}-${month}-${day}, Device: ${ud_id}`);
+
+   
+    fetch('https://partner.feturtles.com/integrations/ctp/go', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,  
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "intent": "action.entities.ENERGY_DATA",
+            "payload": {
+                "device_ids": [ud_id], 
+                "duration": "day",
+                "startDay": day,
+                "month": month,
+                "year": year,
+                "api_v": 1
+            }
+        })
+    })
+    .then(response => response.json())
+    .then(energyData => {
+        
+        const mergedArray = energyData.map(obj => (
+            { ...obj, ud_id: ud_id }
+        ));
+        totalvalue.push(...mergedArray);  
+        console.log("Total Energy Data for Device:", totalvalue);
+        handleEnergyDataResponse([{ ud_id: ud_id }], totalvalue, 'day');  
+    })
+    .catch(error => {
+        console.error('Error fetching energy data for device:', error);
+    });
+}
+
+
+function handleEnergyDataResponse(devices, energyData, viewType) {
+    console.log('Energy Data:', energyData);
+
+    if (energyData.length > 0) {
+        devices.forEach(device => {
+            
+            const deviceId = typeof device === 'object' ? device.ud_id : device;
+            const matchingEnergyData = energyData.find(data => data.ud_id === deviceId);
+
+            if (matchingEnergyData) {
+                console.log(`Device: ${deviceId}, Energy: ${matchingEnergyData.avg_energy}`);
+
+              
+                const totalAverageEnergy = energyData.reduce((sum, data) => sum + data.avg_energy, 0);
+                totalEnergySpan.textContent = `${(totalAverageEnergy).toFixed(2)} kWh`;
+
+               
+                if (viewType === 'day') {
+                    updateBarChartHourly(energyData);
+                }
+            } else {
+                console.log(`No energy data found for device: ${deviceId}`);
+                displayNoDataMessage();
+            }
+        });
+    } else {
+        displayNoDataMessage();
+    }
+}
+
+
+function updateBarChartHourly(energyData) {
+    const ctx = document.getElementById('barChart').getContext('2d');
+    const labels = energyData.map(data => `${data._id}:00`); 
+    const data = energyData.map(data => data.avg_energy);
+
+    safeDestroyChart(barChart); 
+
+    barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Energy (Watt-seconds)',
+                data: data,
+                backgroundColor: '#f7ab13',
+                borderColor: '#f5c71a',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    grid: { display: false }
+                },
+                y: {
+                    grid: { display: true },
+                    ticks: {
+                        callback: function (value) {
+                            return `${value} W`; 
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+function safeDestroyChart(chart) {
+    if (chart && typeof chart.destroy === 'function') {
+        chart.destroy();
+    }
+}
+
+
+function displayNoDataMessage() {
+    Swal.fire({
+        icon: 'info',
+        title: 'No Data Found',
+        text: `No energy data available for the selected date or month/year.`
+    }).then(() => {
+        safeDestroyChart(barChart);
+        document.getElementById('barChart').style.display = 'none';
+    });
+
+    totalEnergySpan.textContent = '0 kWh'; 
+}
+
+</script>
+
+ </body>
+    
+   
+</html>

@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Prego-Smart Kitchen</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/prego_favicon.png" />
+
+    <!-- Library / Plugin Css Build -->
+    <link rel="stylesheet" href="../assets/css/core/libs.min.css">
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" href="../assets/css/aprycot.min.css?v=1.0.0">
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Date Range Picker CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+   
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #ffffff;
+                margin: 0;
+                padding: 0;
+            }
+    
+            .top-bar {
+                height: 100px;
+                background-color: #ffffff;
+                color: #ffffff;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 20px;
+            }
+    
+           
+            .top-bar {
+              height: 150px;
+              display: flex;
+              justify-content: space-evenly;
+              align-items: center;
+            }
+             #img1 {
+              height: 250px;
+              width: 200px;
+              cursor: pointer;
+              margin-right: 400px;
+             }
+            #img2 {
+              height: 50px;
+              width: 50px;
+              margin-left: 580px;
+              cursor: pointer;
+            }
+    
+            .cards {
+                padding: 20px;
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+    
+            .card {
+                flex: 1 1 23%;
+                padding: 20px;
+                background-color: #ffffff;
+                text-align: center;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+                min-width: 200px;
+            }
+    
+            .card:hover {
+                transform: scale(1.05);
+            }
+    
+            .card-content {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+    
+            .card-content img {
+                height: 60px;
+            }
+    
+            .count {
+                font-size: 36px;
+                font-weight: bold;
+                color: #007bff;
+            }
+    
+            .card-description {
+                margin-top: 10px;
+                font-weight: bold;
+                color: rgba(107, 104, 104, 0.644);
+            }
+    
+            .container {
+                padding:20px;
+                margin: 20px;
+                margin-left: 50px;
+                height: 100%;
+                width: 100%;
+                background-color: #ffffff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            .container label {
+                font-weight: bold;
+                color: #333;
+            }
+    
+            select, input[type="date"], input[type="number"], button {
+                padding: 10px;
+                font-size: 16px;
+                margin-top: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                width: 150px;
+                max-width: 250px;
+                display: inline-block;
+                margin-right: 10px;
+            }
+    
+            button {
+                background: linear-gradient(90deg, #087fef, #0891fa); 
+                color: white;
+                padding: 12px 20px; 
+                font-size: 16px;
+                border: none; 
+                border-radius: 8px; 
+                box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+                cursor: pointer; 
+                transition: all 0.3s ease;
+            }
+
+            button:hover {
+                background: linear-gradient(90deg, #0891fa, #087fef); 
+                box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2); 
+                transform: translateY(-2px); 
+            }
+            canvas {
+                margin-top: 20px;
+                width: 100%;
+               
+            }
+    
+            .chart-table-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: space-between;
+            }
+    
+            .table-container {
+                overflow-y: scroll;  /* Enables vertical scrolling */
+                height: 350px;
+                width: 450px;
+                padding: 10px;
+                margin-top: 50px;
+                background-color: white;
+                border-radius: 10px;
+            }
+
+            
+            .table-container::-webkit-scrollbar {
+                width: 0;  
+                background: transparent; 
+            }
+
+            
+            .table-container {
+                scrollbar-width: none;  
+            }
+
+           
+            .table-container {
+                -ms-overflow-style: none; 
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+    
+            table thead th {
+                background-color: #dbdbdb;
+                color: #0c0c0c;
+                padding: 12px;
+                text-align: center;
+                font-size: 10px;
+            }
+    
+            table tbody td {
+                padding: 12px;
+                text-align: left;
+                font-size: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+    
+            table tbody tr:nth-child(odd) {
+                background-color: #f9f9f9;
+            }
+    
+            table tbody tr:hover {
+                background-color: #f1f1f1;
+            }
+    
+            @media (max-width: 768px) {
+                .top-bar {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    padding: 10px;
+                }
+    
+                .cards {
+                    flex-direction: column;
+                    align-items: center;
+                }
+    
+              
+    
+                .chart-table-container {
+                    flex-direction: column;
+                }
+    
+                .table-container {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="dashboard">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <img src="images/prego.png" id="img1" alt="Logo">
+                <img src="images/logout.png" id="img2" alt="Logout">
+            </div>
+    
+            <!-- Cards Section -->
+            <div class="cards">
+                <div class="card">
+                    <div class="card-content">
+                        <img src="images/power.png" alt="Power On">
+                        <div class="count">00</div>
+                    </div>
+                    <div class="card-description">Switches Turned On</div>
+                </div>
+    
+                <div class="card">
+                    <div class="card-content">
+                        <img src="images/power-button.png" alt="Power Off">
+                        <div class="count">00</div>
+                    </div>
+                    <div class="card-description">Switches Turned Off</div>
+                </div>
+    
+                <div class="card">
+                    <div class="card-content">
+                        <img src="images/settings.png" alt="Devices Online">
+                        <div class="count">00</div>
+                    </div>
+                    <div class="card-description">Number of Devices Online</div>
+                </div>
+    
+                <div class="card">
+                    <div class="card-content">
+                        <img src="images/exclamation.png" alt="Unreachable Devices">
+                        <div class="count">00</div>
+                    </div>
+                    <div class="card-description">Unreachable Devices</div>
+                </div>
+            </div>
+    
+            <div class="container">
+                <label for="monthPicker">Select a Month:</label><br>
+                <select id="monthPicker">
+                </select>
+    
+                <input type="number" id="yearPicker" min="2000" max="2100" value="2024">
+    
+                <button id="fetchMonthYearData">Submit</button>
+    
+                <br><br>
+              
+                <label for="dayPicker">Select a Date:</label><br>
+                <input type="date" id="dayPicker">
+                <button id="fetchDayData">Submit</button>
+                
+                <div style="margin-top: 20px;float: right;">
+                    <span style="font-size: 20px;">Total Energy:</span>
+                    <span id="totalEnergy" style="font-size: 18px; color:#f7ab13;">0</span>
+                </div>
+                <div style="display: flex;flex-direction: row;">
+                    <label style="margin-top: 20px;margin-left: 20px; font-weight: bold;color: black;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Total Energy</label>
+                    <div onclick="menuToggle()" style="cursor: pointer; font-size: 30px; font-weight: bold; color: #a29f9f; margin-left: 890px;">
+                        &#9776; 
+                    </div>
+                </div>
+                <canvas id="barChart"></canvas>
+    
+                <div class="chart-table-container">
+                    <div class="chart-container">
+                        <canvas id="pieChart" width="400" height="400"></canvas>
+                    </div>
+    
+                    <div class="table-container" id="tableContainer">
+                        <!-- Table content goes here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+
+const params = new URLSearchParams(window.location.search);
+const accessToken = params.get('accessToken'); 
+const ud_id = params.get('ud_id');
+let ud_idArray; 
+if (ud_id) {
+    ud_idArray =ud_id.split(',');
+    console.log("Split   ",ud_idArray);
+}
+const monthPicker = document.getElementById('monthPicker');
+const yearPicker = document.getElementById('yearPicker');
+const dayPicker = document.getElementById('dayPicker');
+const totalEnergySpan = document.getElementById('totalEnergy');
+const fetchMonthYearDataBtn = document.getElementById('fetchMonthYearData');
+const fetchDayDataBtn = document.getElementById('fetchDayData');
+let pieChart;
+
+
+if (accessToken) {
+    console.log('Access Token:', accessToken);
+
+
+    fetch('https://partner.feturtles.com/integrations/ctp/go', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "intent": "action.entities.SYNC",
+            "entities": [
+                {
+                    "type": 2
+                }
+            ]
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        const devices = data.payload.devices;
+        console.log('Devices:', devices);
+
+        
+        const matchingDevices = devices.filter(device => ud_idArray.includes(device.customData.ud_id));
+
+       
+        if (matchingDevices.length > 0) {
+            console.log('Matching Devices:', matchingDevices);
+
+            
+            fetchMonthYearDataBtn.addEventListener('click', () => {
+                const month = monthPicker.value;
+                const year = yearPicker.value;
+                
+                if (month && year) {
+                    
+                    fetchEnergyDataForMonth(matchingDevices, month, year);
+                } else {
+                    alert('Please select a valid month and year.');
+                }
+            });
+
+           
+            fetchDayDataBtn.addEventListener('click', () => {
+                const day = dayPicker.value;
+                
+                if (day) {
+                    
+                    fetchEnergyDataForDay(matchingDevices);
+                } else {
+                    alert("Please select a valid date.");
+                }
+            });
+
+        } else {
+            console.log('No matching devices found for the provided ud_id.');
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching devices:', error);
+    });
+} else {
+    console.log('No access token found');
+}
+
+
+        window.onload = function () {
+           
+            const today = new Date();
+
+         
+            const monthPicker = document.getElementById('monthPicker');
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i; 
+                option.textContent = new Date(0, i - 1).toLocaleString('default', { month: 'long' });
+                monthPicker.appendChild(option);
+            }
+            monthPicker.value = today.getMonth() + 1; 
+
+           
+            const yearPicker = document.getElementById('yearPicker');
+            yearPicker.value = today.getFullYear(); 
+
+           
+            const dayPicker = document.getElementById('dayPicker');
+            dayPicker.value = today.toISOString().split('T')[0]; 
+        };
+
+        
+    function fetchEnergyDataForDay(matchingDevices) {
+    
+    const totalvalue = [];
+    const selectedDate = new Date(dayPicker.value);
+    const day = selectedDate.getDate();
+    const month = selectedDate.getMonth() + 1;
+    const year = selectedDate.getFullYear();
+
+    console.log(`Fetching energy data for: ${year}-${month}-${day}`);
+
+    const deviceIds = matchingDevices.map(device => device.ud_id);
+    console.log("d_id", deviceIds);
+
+    
+    const fetchPromises = deviceIds.map(device => {
+        return fetch('https://partner.feturtles.com/integrations/ctp/go', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "intent": "action.entities.ENERGY_DATA",
+                "payload": {
+                    "device_ids": [device], 
+                    "duration": "day",
+                    "startDay": day,   
+                    "month": month,
+                    "year": year,
+                    "api_v": 1
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(energyData => {
+
+            const mergedArray = energyData.map(obj => (
+                { ...obj, ud_id: device }
+            ));
+            totalvalue.push(...mergedArray); 
+        })
+        .catch(error => console.error('Error fetching energy data for Day:', error));
+    });
+
+   
+    Promise.all(fetchPromises)
+        .then(() => {
+            
+            console.log("Total Energy Data for Day:", totalvalue); 
+            handleEnergyDataResponse(matchingDevices, totalvalue, 'day'); 
+        })
+        .catch(error => {
+            console.error('Error in fetching all energy data for day:', error);
+        });
+ }
+
+
+       
+    function fetchEnergyDataForMonth(matchingDevices, month, year) {
+    const totalvalue = [];
+    const deviceIds = matchingDevices.map(device => device.ud_id);
+    console.log("d_id", deviceIds);
+
+   
+    const fetchPromises = deviceIds.map(device => {
+        return fetch('https://partner.feturtles.com/integrations/ctp/go', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "intent": "action.entities.ENERGY_DATA",
+                "payload": {
+                    "device_ids": [device],
+                    "duration": "day",
+                    "month": parseInt(month),
+                    "year": parseInt(year),
+                    "startDay": 1,
+                    "api_v": 1
+                }
+            })
+        })
+        .then(response => response.json())
+        .then(energyData => {
+            console.log('Energy Data for Month:', energyData);
+            const mergedArray = energyData.map(obj => (
+                { ...obj, ud_id: device }
+            ));
+            totalvalue.push(...mergedArray);
+        })
+        .catch(error => console.error('Error fetching energy data for month:', error));
+    });
+
+
+    Promise.all(fetchPromises)
+        .then(() => {
+            console.log("tv", totalvalue); // Now you can log totalvalue correctly
+            handleEnergyDataResponse(matchingDevices, totalvalue, 'month'); // Call response handler
+        })
+        .catch(error => {
+            console.error('Error in fetching all energy data:', error);
+        });
+}
+
+
+
+        function safeDestroyChart(chart) {
+            if (chart && typeof chart.destroy === 'function') {
+                chart.destroy();
+            }
+        }
+        
+        let totalAverageEnergy;
+        function handleEnergyDataResponse(matchingDevices, energyData, viewType) {
+            console.log('From ',energyData.length);
+
+            // if (energyData.length != 0) {
+            //     // Separate device data and device energy data
+            //     devices.forEach(device => {
+            //         const matchingEnergyData = energyData.filter(data => data.ud_id === device.ud_id);
+            //         console.log('matchingEnergyData ',matchingEnergyData)
+            //         // if (matchingEnergyData.length>0) {
+            //         //     console.log(`new Device: ${matchingEnergyData}`);
+            //         // } else {
+            //         //     console.log(`No energy data found for device: `);
+            //         // }
+            //     });
+
+            const totalAverageEnergy = energyData.reduce((sum, data) => sum + data.avg_energy, 0);
+            totalEnergySpan.textContent = `${(totalAverageEnergy).toFixed(2)} kWh`;
+
+                
+                if (viewType === 'day') {
+                    updateBarChartHourly(energyData);
+                } else if (viewType === 'month') {
+                    updateBarChartDaily(energyData); 
+                }
+                updatePieChart(matchingDevices, energyData, totalAverageEnergy);
+                updateTable(matchingDevices, energyData, totalAverageEnergy);
+                if(energyData.length==0)
+                {
+                    displayNoDataMessage();
+                }
+
+            
+        }
+
+
+        function displayNoDataMessage() {
+            Swal.fire({
+                icon: 'info',
+                title: 'No Data Found',
+                text: `No energy data available for the selected date or month/year.`
+            }).then(() => {
+                
+                safeDestroyChart(barChart);
+                safeDestroyChart(pieChart);
+        
+                document.getElementById('barChart').style.display = 'none';
+                document.getElementById('pieChart').style.display = 'none';
+            });
+
+            totalEnergySpan.textContent = '0 kWh';
+            tableContainer.innerHTML = '';
+        }
+function updateBarChartHourly(energyData) {
+    console.log("data received", energyData);
+
+    const ctx = document.getElementById('barChart').getContext('2d');
+
+    // Create a map to store total energy and count per hour (_id)
+    const hourDataMap = new Map();
+
+    // Iterate over energyData to aggregate energy by hour
+    energyData.forEach(data => {
+        const hour = parseInt(data._id, 10); // Convert _id to integer (hour)
+        
+        if (!hourDataMap.has(hour)) {
+            // Initialize with total energy and count
+            hourDataMap.set(hour, { totalEnergy: 0, count: 0 });
+        }
+
+        const hourEntry = hourDataMap.get(hour);
+        hourEntry.totalEnergy += data.avg_energy; // Add energy value
+        hourEntry.count += 1; // Increment count
+    });
+
+    // Now we calculate the average energy for each hour
+    const labels = [];
+    const data = [];
+
+    for (let [hour, value] of hourDataMap.entries()) {
+        labels.push(`${hour < 10 ? '0' : ''}${hour}:00`); // Format as HH:00
+        const avgEnergy = value.totalEnergy / value.count; // Calculate average
+        data.push(avgEnergy);
+    }
+
+    // Safely destroy the existing chart before creating a new one
+    safeDestroyChart(barChart);
+
+    // Create the bar chart
+    window.barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Average Energy (Watt-seconds)',
+                data: data,
+                backgroundColor: '#f7ab13',
+                borderColor: '#f5c71a',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    grid: {
+                        display: true
+                    },
+                    ticks: {
+                        callback: function (value) {
+                            return `${value} W`; // Display y-axis values as watts
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.raw} Watt-seconds`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+function updateBarChartDaily(energyData) {
+    const ctx = document.getElementById('barChart').getContext('2d');
+
+    // Aggregating data for each day
+    const aggregatedData = energyData.reduce((acc, data) => {
+        const day = data._id; // Assuming _id is the day number or date
+        if (!acc[day]) {
+            acc[day] = { totalEnergy: 0, count: 0 };
+        }
+        acc[day].totalEnergy += data.avg_energy;
+        acc[day].count += 1;
+        return acc;
+    }, {});
+
+    // Step 1: Identify the range of days
+    const allDays = energyData.map(data => data._id);
+    const minDay = Math.min(...allDays);
+    const maxDay = Math.max(...allDays);
+
+    // Step 2: Fill in missing days with 0 energy
+    const labels = [];
+    const data = [];
+
+    for (let day = minDay; day <= maxDay; day++) {
+        labels.push(`Day ${day}`);
+        if (aggregatedData[day]) {
+            data.push(aggregatedData[day].totalEnergy);
+        } else {
+            data.push(0); // No data for this day, set energy to 0
+        }
+    }
+
+    console.log('labels22', labels);
+    console.log('data22', data);
+
+    safeDestroyChart(window.barChart);
+
+    // Step 3: Create the bar chart
+    window.barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Energy (Watt-seconds)',
+                data: data,
+                backgroundColor: '#f7ab13',
+                borderColor: '#f5c71a',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                },
+                y: {
+                    grid: {
+                        display: true
+                    },
+                    ticks: {
+                        callback: function (value) {
+                            return `${value} W`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+function updatePieChart(matchingDevices, energyData, totalEnergy) {
+    if (energyData.length === 0 || totalEnergy === 0) {
+        console.error('No data available or totalEnergy is zero.');
+        return;
+    }
+
+    // Group energy data by ud_id and sum the avg_energy
+    const groupedEnergyData = energyData.reduce((acc, current) => {
+        const { ud_id, avg_energy } = current;
+
+        if (!acc[ud_id]) {
+            acc[ud_id] = { avgEnergy: 0, occurrences: 0 }; // Initialize if not already present
+        }
+
+        acc[ud_id].avgEnergy += avg_energy || 0;
+        acc[ud_id].occurrences += 1;
+
+        return acc;
+    }, {});
+
+    const labels = [];
+    const data = [];
+
+    // Generate labels and percentages
+    matchingDevices.forEach(device => {
+        const { ud_id, home } = device;
+        const displayName = home && home.display_name ? home.display_name : 'Unknown Device';
+
+        const energyInfo = groupedEnergyData[ud_id];
+        if (energyInfo) {
+            const { avgEnergy } = energyInfo;
+
+            // Calculate energy percentage
+            const energyPercentage = avgEnergy && totalEnergy > 0
+                ? (avgEnergy / totalEnergy) * 100
+                : 0;
+
+            if (energyPercentage > 0) {
+                labels.push(displayName); // Add device name to labels
+                data.push(parseFloat(energyPercentage.toFixed(2))); // Add percentage to data
+            }
+        }
+    });
+
+    console.log('Labels:', labels);
+    console.log('Data:', data);
+
+    // Generate dynamic background colors
+    const backgroundColors = labels.map((_, index) => {
+        const hue = (index * 360 / labels.length) % 360; 
+        return `hsl(${hue}, 70%, 50%)`; 
+    });
+
+    safeDestroyChart(pieChart); // Ensure the previous chart is destroyed
+
+    const ctxPie = document.getElementById('pieChart').getContext('2d');
+
+    pieChart = new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: labels, 
+            datasets: [{
+                data: data, 
+                backgroundColor: backgroundColors.slice(0, labels.length),
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right', 
+                }
+            }
+        }
+    });
+}
+
+function updateTable(matchingDevices, energyData, totalEnergy) {
+    tableContainer.innerHTML = ''; 
+    const table = document.createElement('table');
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    const headers = ['Device Name', 'Energy Consumption', 'Energy Percentage', 'Actions'];
+
+    headers.forEach(headerText => {
+        const th = document.createElement('th');
+        th.innerText = headerText;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+
+    const tbody = document.createElement('tbody');
+
+    function addRow(displayName, avgEnergy, energyPercentage, deviceUdId) {
+        const row = document.createElement('tr');
+        
+        
+        const deviceCell = document.createElement('td');
+        deviceCell.innerText = displayName;
+        row.appendChild(deviceCell);
+
+        
+        const consumptionCell = document.createElement('td');
+        consumptionCell.innerText = avgEnergy !== undefined ? avgEnergy.toFixed(2) : 'N/A';
+        row.appendChild(consumptionCell);
+
+        
+        const percentageCell = document.createElement('td');
+        percentageCell.innerText = energyPercentage ? energyPercentage.toFixed(2) + '%' : 'N/A';
+        row.appendChild(percentageCell);
+
+        
+        const actionsCell = document.createElement('td');
+        const actionButton = document.createElement('text');
+        actionButton.innerText = 'Know More';
+        actionButton.style.textDecoration = 'underline';
+        actionButton.style.color = 'blue';
+        actionButton.onclick = function () {
+            const params = new URLSearchParams({ ud_id: deviceUdId, displayName });
+            window.location.href = `data.html?${params.toString()}`;
+        };
+        actionsCell.appendChild(actionButton);
+        row.appendChild(actionsCell);
+
+        tbody.appendChild(row);
+    }
+
+    const groupedEnergyData = energyData.reduce((acc, current) => {
+        const { ud_id, avg_energy } = current;
+
+        if (!acc[ud_id]) {
+            acc[ud_id] = { avgEnergy: 0, occurrences: 0 };
+        }
+
+        acc[ud_id].avgEnergy += avg_energy || 0;
+        acc[ud_id].occurrences += 1;
+
+        return acc;
+    }, {});
+
+    // Iterate through devices to display grouped energy data
+    matchingDevices.forEach(device => {
+        const { ud_id, home } = device;
+        const displayName = home && home.display_name ? home.display_name : 'Unknown Device';
+
+        // Get summed energy data for this ud_id
+        const energyInfo = groupedEnergyData[ud_id];
+
+        if (energyInfo) {
+            const { avgEnergy } = energyInfo;
+
+           
+            const energyPercentage = avgEnergy && totalEnergy > 0
+                ? (avgEnergy / totalEnergy) * 100
+                : 0;
+
+           
+            addRow(displayName, avgEnergy, energyPercentage, ud_id);
+        }
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    tableContainer.appendChild(table);
+}
+
+
+
+
+    </script>
+
+</body>
+
+
+</html>

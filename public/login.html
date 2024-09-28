@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prego-Smart Kitchen</title>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/prego_favicon.png" />
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f7f7f7;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        .card {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+        .logo-img {
+            max-width: 150px;
+            margin: 0 auto 5px;
+            display: block;
+        }
+        p {
+            color: #777;
+            margin-bottom: 60px;
+        }
+        .form-label {
+            display: block;
+            text-align: left;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .form-check {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .form-check-label {
+            color: #555;
+            font-size: 0.85rem;
+        }
+        .form-check-input {
+            margin-right: 10px;
+        }
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .text-underline {
+            text-decoration: underline;
+            color: #007bff;
+            cursor: pointer;
+        }
+        #error {
+            color: red;
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        /* Loading spinner */
+        #loading {
+            display: none;
+            font-size: 1rem;
+            color: #007bff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <a href="../../dashboard/">
+                <img src="images/prego.png" alt="Prego Logo" class="logo-img">
+            </a>
+            <p>Sign in to stay connected.</p>
+            <form>
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+
+                <div class="form-check">
+                    <div>
+                        <input type="checkbox" id="rememberMe" class="form-check-input">
+                        <label for="rememberMe" class="form-check-label">Remember Me</label>
+                    </div>
+                    <a href="recoverpw.html" class="text-underline">Forgot Password?</a>
+                </div>
+
+                <div id="error" class="text-danger text-center">**Enter valid details</div>
+                <div id="loading">Logging in...</div>
+
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+
+            <p class="mt-3">Don’t have an account? <span class="text-underline">Click here to sign up.</span></p>
+        </div>
+    </div>
+    <script>
+      //  function getAccessToken() {
+      //       const params = new URLSearchParams(window.location.search);
+      //       return params.get('accessToken'); 
+      //   }
+
+        const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJPQXV0aENsaWVudCI6IjY1ZmJmZGUxNmZhY2FmOGQ1YTU4NDNhOCIsIlVzZXIiOnsiX2lkIjoiNjVmZDYzMGJlYWM0YTNlNmI1MTIzZmQ2IiwiaG9tZXMiOlsiNjY2YWNmZjE2MTk3YmNhYWEyMGY5ZWMwIiwiNjVmZDYzODgyZTUwMzRjMGMzOTU4NWFiIiwiNjY1ZWZhYTA5NDVlODI4OTJhNjlhMzcyIiwiNjY2MDAxYWM2YzVhMGZkMmI1YzBlYWRiIl0sInBhcnRuZXIiOiI2MjAyMDA0NmM3NDY2MzBjMzg3ZGVmOTgifSwiaWF0IjoxNzI3NTA3OTYxLCJleHAiOjE3Mjc1OTQzNjF9.Sz2-emLChLyhGNZTaY57OXkqxEzvTdEQl-I1GM9aTfY";
+        
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            
+            
+            document.getElementById('error').style.display = 'none';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            document.getElementById('loading').style.display = 'block';
+
+            fetch(`https://thewhizly.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('loading').style.display = 'none'; 
+
+        if (data.success) {
+            alert(data.message);
+
+            if (data.ud_id) {
+                const params = new URLSearchParams({ accessToken: accessToken, ud_id: data.ud_id });
+                window.location.href = 'energy.html?' + params.toString();
+               } else {
+                alert('No ud_id found for this account.');
+            }
+        } else {
+            document.getElementById('error').innerText = data.message;
+            document.getElementById('error').style.display = 'block';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('loading').style.display = 'none'; 
+        document.getElementById('error').innerText = 'An error occurred. Please try again.';
+        document.getElementById('error').style.display = 'block';
+    });
+
+        });
+    </script>    
+</body>
+</html>
