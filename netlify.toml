@@ -1,9 +1,8 @@
 [build]
-  publish = "build" # This is the directory where the build output goes
   functions = "functions" # This is where your serverless functions are stored
 
 [dev]
-  command = "npm run dev" # The command to start your app locally for development
+  command = "npm run start" # The command to start your app locally for development
   port = 3000 # The port your app uses locally
 
 [[redirects]]

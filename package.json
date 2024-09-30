@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "netlify build",
-  "start": "netlify dev"
+    "build": "netlify build", // Consider if you really need a build command
+    "start": "netlify dev"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +15,6 @@
     "express": "^4.21.0",
     "netlify-cli": "^17.36.2",
     "netlify-lambda": "^2.0.16",
-    "react-scripts": "^5.0.1",
     "serverless-http": "^3.2.0"
   },
   "description": ""
