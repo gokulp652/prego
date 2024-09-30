@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "netlify build", // Consider if you really need a build command
+    "build": "netlify build",
     "start": "netlify dev"
   },
   "keywords": [],
