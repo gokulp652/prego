@@ -65,6 +65,6 @@ router.get("/catchOauthToken", async (req, res) => {
 });
 
 
-app.use("/.netlify/functions/app", router);
+app.use("/.netlify/functions/index", router);
 
 module.exports.handler = serverless(app);
