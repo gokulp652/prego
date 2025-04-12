@@ -109,6 +109,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="card">
@@ -141,51 +142,140 @@
         </div>
     </div>
     <script>
-       function getAccessToken() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('accessToken'); 
-        }
+        function getAccessToken() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('accessToken'); 
+}
 
-        const accessToken = getAccessToken();
+const accessToken = getAccessToken(); ;
+// getAccessToken();
+
+if (!accessToken) {
+    // Ask the user for confirmation before redirecting
+    const userConfirmed = confirm("No access token found. Do you want to proceed to the login page?");
+    
+    if (userConfirmed) {
+        // Redirect to the OAuth authorization URL if the user confirms
+        window.location.href = "https://partner.feturtles.com/authstart?state=123456&client_id=xpfaaOgscZ6PHmkAh3zwP&redirect_uri=https://aioty.netlify.app/.netlify/functions/index/catchOauthToken";
+    } else {
+        // Optionally, handle the case where the user cancels the action
+        console.log("User canceled the redirection.");
+    }
+} else {
+    console.log("Access token found:", accessToken);
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (userEmail) {
+        console.log('Logged in user email:', userEmail);
+    } else {
+        console.log('No email found in localStorage. Redirecting to login...');
         
-        document.querySelector('form').addEventListener('submit', function(event) {
-            event.preventDefault(); 
-            
-            
-            document.getElementById('error').style.display = 'none';
+    }
+});
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    
+    document.getElementById('loading').style.display = 'block';
 
-            document.getElementById('loading').style.display = 'block';
-
-            fetch(`https://thewhizly.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('loading').style.display = 'none'; 
-
-        if (data.success) {
-            alert(data.message);
-
-            if (data.ud_id) {
-                const params = new URLSearchParams({ accessToken: accessToken, ud_id: data.ud_id });
-                window.location.href = 'https://thewhizly.co.in/prego_0.1/oauth-server/public/energy.html?' + params.toString();
-               } else {
-                alert('No ud_id found for this account.');
+    fetch(`https://thewhizly.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
             }
-        } else {
-            document.getElementById('error').innerText = data.message;
-            document.getElementById('error').style.display = 'block';
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('loading').style.display = 'none'; 
-        document.getElementById('error').innerText = 'An error occurred. Please try again.';
-        document.getElementById('error').style.display = 'block';
-    });
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('loading').style.display = 'none';
+            
+            if (data.success) {
+                alert(data.message);
+                localStorage.setItem('userEmail', email);
+console.log('datgadoh',data.ud_id);
+console.log('datgadoh',data.customers);
+                if (data.ud_id && data.customers) {
+                    const params = new URLSearchParams({
+                        accessToken: accessToken,
+                        ud_id: data.ud_id,
+                        customers: data.customers
+                    
+                    });
 
+                    // window.location.href = 'energy.html?' + params.toString();
+                    window.location.href = 'https://thewhizly.co.in/prego_0.1/oauth-server/public/energy.html?' + params.toString();
+
+                } else {
+                    alert('Missing UD ID or customer names.');
+                }
+            } else {
+                document.getElementById('error').innerText = data.message;
+                document.getElementById('error').style.display = 'block';
+            }
+        })
+        .catch(error => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').innerText = 'An error occurred. Please try again.';
+            document.getElementById('error').style.display = 'block';
         });
-    </script>    
+});
+
+
+
+// document.querySelector('form').addEventListener('submit', function(event) {
+//     event.preventDefault(); 
+    
+//     const email = document.getElementById('email').value;
+//     const password = document.getElementById('password').value;
+    
+//     document.getElementById('loading').style.display = 'block';
+
+//     fetch(`https://thewhizly.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+//         .then(response => {
+//             if (!response.ok) {
+//                 throw new Error('Failed to fetch data');
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             document.getElementById('loading').style.display = 'none';
+
+//             // ✅ Log full API response
+//             console.log("API Response:", data);
+
+//             if (data.success) {
+//                 console.log("Login successful!");
+//                 console.log("Email:", email);
+//                 console.log("UD ID:", data.ud_id || "Not available");
+
+//                 if (data.customers) {
+//                     console.log("Customer Names:", data.customers);
+//                 }
+
+//                 // ⚠️ NO redirection here
+//                 // window.location.href = ...
+//             } else {
+//                 console.error("Login failed:", data.message);
+//                 document.getElementById('error').innerText = data.message;
+//                 document.getElementById('error').style.display = 'block';
+//             }
+//         })
+//         .catch(error => {
+//             document.getElementById('loading').style.display = 'none';
+//             document.getElementById('error').innerText = 'An error occurred. Please try again.';
+//             document.getElementById('error').style.display = 'block';
+//             console.error("Fetch error:", error);
+//         });
+// });
+
+
+
+    </script>  
+    <!-- https://thewhizly.co.in/prego_0.1/oauth-server/public/energy.html?   -->
 </body>
 </html>
