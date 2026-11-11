@@ -184,7 +184,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
     
     document.getElementById('loading').style.display = 'block';
 
-    fetch(`http://aioty.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+    fetch(`https://aioty.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
@@ -208,7 +208,7 @@ console.log('datgadoh',data.customers);
                     });
 
                     // window.location.href = 'energy.html?' + params.toString();
-                    window.location.href = 'http://aioty.co.in/prego_0.1/oauth-server/public/energy.html?' + params.toString();
+                    window.location.href = 'https://aioty.co.in/prego_0.1/oauth-server/public/energy.html?' + params.toString();
 
                 } else {
                     alert('Missing UD ID or customer names.');
@@ -235,7 +235,7 @@ console.log('datgadoh',data.customers);
     
 //     document.getElementById('loading').style.display = 'block';
 
-//     fetch(`http://aioty.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
+//     fetch(`https://aioty.co.in/tag/prego/prego_login.php?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`)
 //         .then(response => {
 //             if (!response.ok) {
 //                 throw new Error('Failed to fetch data');
@@ -276,6 +276,6 @@ console.log('datgadoh',data.customers);
 
 
     </script>  
-    <!-- http://aioty.co.in/prego_0.1/oauth-server/public/energy.html?   -->
+    <!-- https://aioty.co.in/prego_0.1/oauth-server/public/energy.html?   -->
 </body>
 </html>
